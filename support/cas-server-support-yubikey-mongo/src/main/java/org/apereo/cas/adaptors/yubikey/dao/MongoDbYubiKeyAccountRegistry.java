@@ -46,7 +46,7 @@ public class MongoDbYubiKeyAccountRegistry extends BaseYubiKeyAccountRegistry {
     }
 
     @Override
-    public Collection<YubiKeyAccount> getAccounts() {
+    public Collection<? extends YubiKeyAccount> getAccounts() {
         return this.mongoTemplate.findAll(YubiKeyAccount.class, this.collectionName)
             .stream()
             .map(it -> {
@@ -57,7 +57,7 @@ public class MongoDbYubiKeyAccountRegistry extends BaseYubiKeyAccountRegistry {
     }
 
     @Override
-    public Optional<YubiKeyAccount> getAccount(final String uid) {
+    public Optional<? extends YubiKeyAccount> getAccount(final String uid) {
         final var query = new Query();
         query.addCriteria(Criteria.where("username").is(uid));
         final var account = this.mongoTemplate.findOne(query, YubiKeyAccount.class, this.collectionName);
