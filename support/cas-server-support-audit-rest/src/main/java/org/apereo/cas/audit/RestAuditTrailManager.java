@@ -1,5 +1,10 @@
 package org.apereo.cas.audit;
 
+import org.apereo.cas.audit.spi.AuditActionContextJsonSerializer;
+import org.apereo.cas.configuration.model.core.audit.AuditRestProperties;
+import org.apereo.cas.util.CollectionUtils;
+import org.apereo.cas.util.HttpUtils;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -10,12 +15,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
-import org.apereo.cas.audit.spi.AuditActionContextJsonSerializer;
-import org.apereo.cas.configuration.model.core.audit.AuditRestProperties;
-import org.apereo.cas.util.CollectionUtils;
-import org.apereo.cas.util.HttpUtils;
 import org.apereo.inspektr.audit.AuditActionContext;
-import org.apereo.inspektr.audit.AuditTrailManager;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -33,7 +33,7 @@ import java.util.concurrent.Executors;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class RestAuditTrailManager implements AuditTrailManager {
+public class RestAuditTrailManager extends AbstractAuditTrailManager {
     private static final ObjectMapper MAPPER = new ObjectMapper()
         .findAndRegisterModules()
         .registerModule(new SimpleModule().setMixInAnnotation(AuditActionContext.class, AbstractAuditActionContextMixin.class));
@@ -47,22 +47,14 @@ public class RestAuditTrailManager implements AuditTrailManager {
     private final AuditRestProperties properties;
 
     @Override
-    public void record(final AuditActionContext audit) {
-        final Runnable task = () -> {
-            final var auditJson = serializer.toString(audit);
-            LOGGER.debug("Sending audit action context to REST endpoint [{}]", properties.getUrl());
-            HttpUtils.executePost(properties.getUrl(), properties.getBasicAuthUsername(), properties.getBasicAuthPassword(), auditJson);
-        };
-
-        if (this.asynchronous) {
-            this.executorService.execute(task);
-        } else {
-            task.run();
-        }
+    public void saveAuditRecord(final AuditActionContext audit) {
+        final var auditJson = serializer.toString(audit);
+        LOGGER.debug("Sending audit action context to REST endpoint [{}]", properties.getUrl());
+        HttpUtils.executePost(properties.getUrl(), properties.getBasicAuthUsername(), properties.getBasicAuthPassword(), auditJson);
     }
 
     @Override
-    public Set<AuditActionContext> getAuditRecordsSince(final LocalDate localDate) {
+    public Set<? extends AuditActionContext> getGenericAuditRecordsSince(final LocalDate localDate) {
         try {
             LOGGER.debug("Sending query to audit REST endpoint to fetch records from [{}]", localDate);
             final var response = HttpUtils.executeGet(properties.getUrl(), properties.getBasicAuthUsername(),
