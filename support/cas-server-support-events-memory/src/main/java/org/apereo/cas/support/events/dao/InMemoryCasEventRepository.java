@@ -30,7 +30,7 @@ public class InMemoryCasEventRepository extends AbstractCasEventRepository {
     }
 
     @Override
-    public Collection<CasEvent> getEventsForPrincipal(final String id) {
+    public Collection<? extends CasEvent> getEventsForPrincipal(final String id) {
         return cache
             .asMap()
             .values()

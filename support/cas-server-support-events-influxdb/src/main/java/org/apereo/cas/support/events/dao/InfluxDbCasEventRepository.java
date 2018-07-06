@@ -49,7 +49,7 @@ public class InfluxDbCasEventRepository extends AbstractCasEventRepository imple
     }
 
     @Override
-    public Collection<? extends CasEvent> load() {
+    public Collection<CasEvent> load() {
         final List<CasEvent> events = new ArrayList<>();
         final var results = influxDbConnectionFactory.query(MEASUREMENT);
         results.getResults()
