@@ -86,7 +86,7 @@ public class CosmosDbServiceRegistry extends AbstractServiceRegistry {
     }
 
     @Override
-    public List<RegisteredService> load() {
+    public List<? extends RegisteredService> load() {
         final var query = String.format("SELECT * FROM %s c", this.collectionName);
         final var results = queryDocuments(query);
         final var it = results.getQueryIterator();

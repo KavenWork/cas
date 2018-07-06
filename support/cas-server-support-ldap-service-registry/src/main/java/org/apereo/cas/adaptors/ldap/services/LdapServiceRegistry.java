@@ -142,7 +142,7 @@ public class LdapServiceRegistry extends AbstractServiceRegistry {
     }
 
     @Override
-    public List<RegisteredService> load() {
+    public List<? extends RegisteredService> load() {
         final List<RegisteredService> list = new ArrayList<>();
         try {
             final var response = getSearchResultResponse();

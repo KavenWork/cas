@@ -237,7 +237,7 @@ public abstract class AbstractResourceBasedServiceRegistry extends AbstractServi
     }
 
     @Override
-    public synchronized List<RegisteredService> load() {
+    public synchronized List<? extends RegisteredService> load() {
         final var files = FileUtils.listFiles(this.serviceRegistryDirectory.toFile(), new String[]{getExtension()}, true);
         this.serviceMap = files
             .stream()

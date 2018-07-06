@@ -83,7 +83,7 @@ public class CouchbaseServiceRegistry extends AbstractServiceRegistry implements
     }
 
     @Override
-    public List<RegisteredService> load() {
+    public List<? extends RegisteredService> load() {
         try {
             final var allKeys = executeViewQueryForAllServices();
             final List<RegisteredService> services = new ArrayList<>();

@@ -51,7 +51,7 @@ public class MongoDbServiceRegistry extends AbstractServiceRegistry {
     }
 
     @Override
-    public List<RegisteredService> load() {
+    public List<? extends RegisteredService> load() {
         final var list = this.mongoTemplate.findAll(RegisteredService.class, this.collectionName);
         list.forEach(s -> publishEvent(new CasRegisteredServiceLoadedEvent(this, s)));
         return list;
