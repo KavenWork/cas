@@ -136,7 +136,7 @@ public class DistributedTicketRegistryTests {
         }
 
         @Override
-        public Collection<Ticket> getTickets() {
+        public Collection<? extends Ticket> getTickets() {
             return this.tickets.values();
         }
 

@@ -128,7 +128,7 @@ public class CouchbaseTicketRegistry extends AbstractTicketRegistry implements D
     }
 
     @Override
-    public Collection<Ticket> getTickets() {
+    public Collection<? extends Ticket> getTickets() {
         final List<Ticket> tickets = new ArrayList<>();
         this.ticketCatalog.findAll().forEach(t -> {
             final var it = getViewResultIteratorForPrefixedTickets(t.getPrefix() + '-').iterator();

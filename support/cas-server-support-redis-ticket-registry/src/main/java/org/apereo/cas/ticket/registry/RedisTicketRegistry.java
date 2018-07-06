@@ -78,7 +78,7 @@ public class RedisTicketRegistry extends AbstractTicketRegistry {
     }
 
     @Override
-    public Collection<Ticket> getTickets() {
+    public Collection<? extends Ticket> getTickets() {
         return this.client.keys(getPatternTicketRedisKey()).stream()
             .map(redisKey -> {
                 final var ticket = this.client.boundValueOps(redisKey).get();
