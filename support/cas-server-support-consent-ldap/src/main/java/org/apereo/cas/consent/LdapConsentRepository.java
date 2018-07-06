@@ -68,7 +68,7 @@ public class LdapConsentRepository implements ConsentRepository {
     }
 
     @Override
-    public Collection<ConsentDecision> findConsentDecisions(final String principal) {
+    public Collection<? extends ConsentDecision> findConsentDecisions(final String principal) {
         final var entry = readConsentEntry(principal);
         if (entry != null) {
             final var consentDecisions = entry.getAttribute(this.ldap.getConsentAttributeName());
@@ -84,7 +84,7 @@ public class LdapConsentRepository implements ConsentRepository {
     }
 
     @Override
-    public Collection<ConsentDecision> findConsentDecisions() {
+    public Collection<? extends ConsentDecision> findConsentDecisions() {
         final var entries = readConsentEntries();
         if (entries != null && !entries.isEmpty()) {
             final Set<ConsentDecision> decisions = new HashSet<>();
