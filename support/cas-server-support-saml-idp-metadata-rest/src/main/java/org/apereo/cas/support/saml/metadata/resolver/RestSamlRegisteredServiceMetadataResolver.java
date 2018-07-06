@@ -31,7 +31,7 @@ public class RestSamlRegisteredServiceMetadataResolver extends BaseSamlRegistere
     }
 
     @Override
-    public Collection<MetadataResolver> resolve(final SamlRegisteredService service) {
+    public Collection<? extends MetadataResolver> resolve(final SamlRegisteredService service) {
         try {
             final var rest = samlIdPProperties.getMetadata().getRest();
             final var response = HttpUtils.execute(rest.getUrl(), rest.getMethod(),

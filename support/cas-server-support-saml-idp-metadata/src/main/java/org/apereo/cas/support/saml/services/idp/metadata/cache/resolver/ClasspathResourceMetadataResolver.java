@@ -29,7 +29,7 @@ public class ClasspathResourceMetadataResolver extends BaseSamlRegisteredService
     }
 
     @Override
-    public Collection<MetadataResolver> resolve(final SamlRegisteredService service) {
+    public Collection<? extends MetadataResolver> resolve(final SamlRegisteredService service) {
         final var metadataLocation = service.getMetadataLocation();
         LOGGER.info("Loading SAML metadata from [{}]", metadataLocation);
         try (var in = ResourceUtils.getResourceFrom(metadataLocation).getInputStream()) {
